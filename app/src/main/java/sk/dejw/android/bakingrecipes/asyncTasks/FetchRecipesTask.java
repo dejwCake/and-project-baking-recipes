@@ -2,6 +2,7 @@ package sk.dejw.android.bakingrecipes.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.net.URL;
 
@@ -27,11 +28,8 @@ public class FetchRecipesTask extends AsyncTask<String, Void, Recipe[]> {
 
     @Override
     protected Recipe[] doInBackground(String... params) {
-        if (params.length == 0) {
-            return null;
-        }
-
         URL requestUrl = RecipeNetworkUtils.buildUrl(mContext);
+        Log.d(TAG, "Request url is " + requestUrl.toString());
 
         try {
             String jsonResponse = RecipeNetworkUtils

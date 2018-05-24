@@ -45,8 +45,10 @@ public class RecipeNetworkUtils {
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
+                Log.d(TAG, "Input found");
                 return scanner.next();
             } else {
+                Log.d(TAG, "No more input");
                 return null;
             }
         } finally {
