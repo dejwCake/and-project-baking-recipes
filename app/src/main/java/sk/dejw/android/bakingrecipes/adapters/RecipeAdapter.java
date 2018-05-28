@@ -14,10 +14,10 @@ import butterknife.ButterKnife;
 import sk.dejw.android.bakingrecipes.R;
 import sk.dejw.android.bakingrecipes.models.Recipe;
 
-/**
- * Converts cursor data for squawk messages into visible list items in a RecyclerView
- */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
+
+    private ArrayList<Recipe> mData;
+    private RecipeAdapterOnClickHandler mClickHandler;
 
     public RecipeAdapter(ArrayList<Recipe> data, RecipeAdapterOnClickHandler clickHandler){
         this.mData = data;
@@ -28,8 +28,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         void onRecipeClick(Recipe recipe);
     }
 
-    private ArrayList<Recipe> mData;
-    private RecipeAdapterOnClickHandler mClickHandler;
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,7 +57,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.recipe_name) TextView recipeNameTextView;
+        @BindView(R.id.tv_recipe_name) TextView recipeNameTextView;
         int itemPosition;
 
         public RecipeViewHolder(View layoutView) {

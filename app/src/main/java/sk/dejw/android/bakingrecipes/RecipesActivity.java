@@ -1,5 +1,6 @@
 package sk.dejw.android.bakingrecipes;
 
+import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,7 +52,11 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         }
         ButterKnife.bind(this);
 
-        mRecipeListView.setLayoutManager(new GridLayoutManager(this, 1));
+        if(findViewById(R.id.phone_frame_layout) != null) {
+            mRecipeListView.setLayoutManager(new GridLayoutManager(this, 1));
+        } else {
+            mRecipeListView.setLayoutManager(new GridLayoutManager(this, 3));
+        }
         mAdapter = new RecipeAdapter(mListOfRecipes, this);
         mRecipeListView.setAdapter(mAdapter);
 

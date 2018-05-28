@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/phone_frame_layout" >
+    android:id="@+id/tablet_frame_layout" >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recipe_list_view"

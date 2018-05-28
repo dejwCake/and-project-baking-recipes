@@ -1,0 +1,46 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="sk.dejw.android.bakingrecipes.RecipeDetailFragment">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ingredients"
+            android:textAppearance="@android:style/TextAppearance.Material.Title"
+            tools:ignore="NewApi"
+            android:padding="@dimen/text_view_padding" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_ingredient_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/steps"
+            android:textAppearance="@android:style/TextAppearance.Material.Title"
+            tools:ignore="NewApi"
+            android:padding="@dimen/text_view_padding" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_step_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_margin" />
+    </LinearLayout>
+
+</ScrollView>
