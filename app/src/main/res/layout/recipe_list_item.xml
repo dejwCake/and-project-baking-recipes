@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/list_item_padding_bottom"
+    android:paddingEnd="@dimen/list_item_padding_right"
+    android:paddingLeft="@dimen/list_item_padding_left"
+    android:paddingRight="@dimen/list_item_padding_right"
+    android:paddingStart="@dimen/list_item_padding_left"
+    android:paddingTop="@dimen/list_item_padding_top">
+
+    <TextView
+        android:id="@+id/recipe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/text_view_padding"
+        android:paddingLeft="@dimen/text_view_padding"
+        android:paddingStart="@dimen/text_view_padding"
+        android:textColor="@color/colorText"
+        android:textSize="14sp" />
+
+</RelativeLayout>
