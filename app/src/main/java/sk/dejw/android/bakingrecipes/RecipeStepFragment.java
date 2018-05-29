@@ -9,6 +9,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
@@ -30,6 +31,9 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sk.dejw.android.bakingrecipes.models.Recipe;
@@ -45,6 +49,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     private Recipe mRecipe;
     private int mRecipeStepPosition;
     private RecipeStep mRecipeStep;
+    private ArrayList<RecipeStep> mRecipeSteps;
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mPlayerView;
@@ -70,7 +75,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         View rootView = inflater.inflate(R.layout.fragment_recipe_step, container, false);
         ButterKnife.bind(this, rootView);
 
-        mRecipeStep = mRecipe.getSteps()[mRecipeStepPosition];
+        mRecipeSteps = new ArrayList<RecipeStep>(Arrays.asList(mRecipe.getSteps()));
+        mRecipeStep = mRecipeSteps.get(mRecipeStepPosition);
         mDescription.setText(mRecipeStep.getDescription());
 
         //TODO setup layout
