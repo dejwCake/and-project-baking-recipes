@@ -47,7 +47,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             if(savedInstanceState == null) {
 
                 RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
-                recipeStepFragment.setRecipeStep(mRecipe.getSteps()[0]);
+                recipeStepFragment.setRecipe(mRecipe);
+                recipeStepFragment.setRecipeStepPosition(0);
 
                 fragmentManager.beginTransaction()
                         .add(R.id.recipe_step_container, recipeStepFragment)
@@ -64,18 +65,20 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         super.onSaveInstanceState(outState);
     }
 
-    public void onRecipeStepSelected(RecipeStep recipeStep) {
+    public void onRecipeStepSelected(int recipeStepPosition) {
         if(mTwoPane == true) {
 
             RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
 
-            recipeStepFragment.setRecipeStep(recipeStep);
+            recipeStepFragment.setRecipe(mRecipe);
+            recipeStepFragment.setRecipeStepPosition(recipeStepPosition);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.recipe_step_container, recipeStepFragment)
                     .commit();
         } else {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(RecipeStepFragment.RECIPE_STEP, recipeStep);
+            bundle.putParcelable(RecipeStepFragment.RECIPE, mRecipe);
+            bundle.putInt(RecipeStepFragment.RECIPE_STEP_POSITION, recipeStepPosition);
             bundle.putString(RecipeStepActivity.RECIPE_NAME, mRecipe.getName());
 
             final Intent intent = new Intent(this, RecipeStepActivity.class);

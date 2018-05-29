@@ -3,7 +3,8 @@ package sk.dejw.android.bakingrecipes;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import sk.dejw.android.bakingrecipes.models.RecipeStep;
+
+import sk.dejw.android.bakingrecipes.models.Recipe;
 
 public class RecipeStepActivity extends AppCompatActivity {
 
@@ -23,8 +24,10 @@ public class RecipeStepActivity extends AppCompatActivity {
 
             RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
 
-            RecipeStep recipeStep = getIntent().getParcelableExtra(RecipeStepFragment.RECIPE_STEP);
-            recipeStepFragment.setRecipeStep(recipeStep);
+            Recipe recipe = getIntent().getParcelableExtra(RecipeStepFragment.RECIPE);
+            recipeStepFragment.setRecipe(recipe);
+            int recipeStepPosition = getIntent().getIntExtra(RecipeStepFragment.RECIPE_STEP_POSITION, 0);
+            recipeStepFragment.setRecipeStepPosition(recipeStepPosition);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 

@@ -77,12 +77,12 @@ public class RecipeDetailFragment extends Fragment  implements RecipeStepAdapter
     }
 
     @Override
-    public void onRecipeStepClick(RecipeStep recipeStep) {
-        mCallback.onRecipeStepSelected(recipeStep);
+    public void onRecipeStepClick(int recipeStepPosition) {
+        mCallback.onRecipeStepSelected(recipeStepPosition);
     }
 
     public interface OnRecipeStepClickListener {
-        void onRecipeStepSelected(RecipeStep recipeStep);
+        void onRecipeStepSelected(int recipeStepPosition);
     }
 
     @Override
