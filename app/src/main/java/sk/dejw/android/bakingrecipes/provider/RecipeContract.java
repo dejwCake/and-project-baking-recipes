@@ -41,4 +41,6 @@ public class RecipeContract {
     @DataType(DataType.Type.TEXT)
     @NotNull
     public static final String COLUMN_IMAGE = "image";
+
+    public static final long INVALID_RECIPE_ID = -1;
 }
