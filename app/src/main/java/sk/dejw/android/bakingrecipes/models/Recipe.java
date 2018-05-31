@@ -3,6 +3,8 @@ package sk.dejw.android.bakingrecipes.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 public class Recipe implements Parcelable {
     private Integer id;
     private String name;
@@ -77,12 +79,22 @@ public class Recipe implements Parcelable {
         return ingredients;
     }
 
+    public String getIngredientsInJson() {
+        Gson gson = new Gson();
+        return gson.toJson(ingredients);
+    }
+
     public void setIngredients(Ingredient[] ingredients) {
         this.ingredients = ingredients;
     }
 
     public RecipeStep[] getSteps() {
         return steps;
+    }
+
+    public String getStepsInJson() {
+        Gson gson = new Gson();
+        return gson.toJson(steps);
     }
 
     public void setSteps(RecipeStep[] steps) {

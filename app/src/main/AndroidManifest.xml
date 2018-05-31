@@ -25,6 +25,10 @@
         <activity
             android:name=".RecipeStepActivity"
             android:parentActivityName=".RecipesActivity"></activity>
+        <provider
+            android:name=".provider.generated.RecipeProvider"
+            android:authorities="sk.dejw.android.bakingrecipes.recipes"
+            android:exported="false" />
     </application>
 
 </manifest>
