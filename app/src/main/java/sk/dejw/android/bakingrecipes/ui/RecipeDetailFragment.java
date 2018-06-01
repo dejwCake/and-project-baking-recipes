@@ -1,4 +1,4 @@
-package sk.dejw.android.bakingrecipes;
+package sk.dejw.android.bakingrecipes.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import sk.dejw.android.bakingrecipes.R;
 import sk.dejw.android.bakingrecipes.adapters.IngredientAdapter;
 import sk.dejw.android.bakingrecipes.adapters.RecipeStepAdapter;
 import sk.dejw.android.bakingrecipes.models.Ingredient;

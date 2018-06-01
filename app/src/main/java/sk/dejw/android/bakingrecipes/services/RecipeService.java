@@ -1,4 +1,4 @@
-package sk.dejw.android.bakingrecipes;
+package sk.dejw.android.bakingrecipes.services;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 
+import sk.dejw.android.bakingrecipes.R;
+import sk.dejw.android.bakingrecipes.RecipeWidgetProvider;
 import sk.dejw.android.bakingrecipes.models.Recipe;
 import sk.dejw.android.bakingrecipes.provider.RecipeContract;
 import sk.dejw.android.bakingrecipes.provider.RecipeProvider;
@@ -41,13 +43,24 @@ public class RecipeService extends IntentService {
     }
 
     private void handleActionUpdateRecipeWidgets(long recipeId) {
-        Cursor cursor = getContentResolver().query(
-                RecipeProvider.Recipes.withId(recipeId),
-                null,
-                null,
-                null,
-                RecipeContract.COLUMN_ID
-        );
+        Cursor cursor = null;
+        if(recipeId == RecipeContract.INVALID_RECIPE_ID) {
+            cursor = getContentResolver().query(
+                    RecipeProvider.Recipes.RECIPES_URI,
+                    null,
+                    null,
+                    null,
+                    RecipeContract.COLUMN_ID
+            );
+        } else {
+            cursor = getContentResolver().query(
+                    RecipeProvider.Recipes.withId(recipeId),
+                    null,
+                    null,
+                    null,
+                    RecipeContract.COLUMN_ID
+            );
+        }
 
         Recipe recipe = null;
         if (cursor != null && cursor.getCount() > 0) {
@@ -55,11 +68,9 @@ public class RecipeService extends IntentService {
             cursor.close();
         }
 
-        //TODO finish and introduce RecipeWidgetProvider
-
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-//        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
-//        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
-//        RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager, appWidgetIds, recipe);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.gv_widget_recipe_steps_view);
+        RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager, appWidgetIds, recipe);
     }
 }

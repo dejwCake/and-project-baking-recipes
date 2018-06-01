@@ -1,15 +1,18 @@
-package sk.dejw.android.bakingrecipes;
+package sk.dejw.android.bakingrecipes.ui;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import sk.dejw.android.bakingrecipes.R;
+import sk.dejw.android.bakingrecipes.services.RecipeService;
 import sk.dejw.android.bakingrecipes.models.Recipe;
-import sk.dejw.android.bakingrecipes.models.RecipeStep;
 
 public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailFragment.OnRecipeStepClickListener {
 
+    private static final String TAG = RecipeDetailActivity.class.getSimpleName();
     public static final String EXTRA_RECIPE = "recipe";
     public static final String BUNDLE_RECIPE = "recipe";
 
@@ -24,8 +27,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
         Intent startingIntent = getIntent();
         if (startingIntent != null) {
+            Log.d(TAG, "Intent: " + startingIntent.toString());
             if (startingIntent.hasExtra(EXTRA_RECIPE)) {
-                mRecipe = getIntent().getExtras().getParcelable(EXTRA_RECIPE);
+                mRecipe = startingIntent.getExtras().getParcelable(EXTRA_RECIPE);
             }
         }
 
@@ -57,6 +61,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         } else {
             mTwoPane = false;
         }
+
+        RecipeService.startActionUpdateRecipeWidgets(this, mRecipe.getId());
     }
 
     @Override

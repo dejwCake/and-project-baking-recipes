@@ -1,4 +1,4 @@
-package sk.dejw.android.bakingrecipes;
+package sk.dejw.android.bakingrecipes.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import sk.dejw.android.bakingrecipes.R;
 import sk.dejw.android.bakingrecipes.adapters.RecipeAdapter;
 import sk.dejw.android.bakingrecipes.asyncTasks.AsyncTaskCompleteListener;
 import sk.dejw.android.bakingrecipes.asyncTasks.FetchRecipesTask;

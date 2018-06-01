@@ -1,4 +1,4 @@
-package sk.dejw.android.bakingrecipes;
+package sk.dejw.android.bakingrecipes.ui;
 
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,7 +9,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
@@ -36,6 +35,7 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import sk.dejw.android.bakingrecipes.R;
 import sk.dejw.android.bakingrecipes.models.Recipe;
 import sk.dejw.android.bakingrecipes.models.RecipeStep;
 
@@ -163,7 +163,9 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         if(mHasPlayer) {
             releasePlayer();
         }
-        mMediaSession.setActive(false);
+        if(mMediaSession != null) {
+            mMediaSession.setActive(false);
+        }
     }
 
     @Override
