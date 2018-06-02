@@ -12,11 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.squareup.picasso.Picasso;
-
 import sk.dejw.android.bakingrecipes.models.Recipe;
-import sk.dejw.android.bakingrecipes.provider.RecipeContract;
-import sk.dejw.android.bakingrecipes.services.RecipeService;
 import sk.dejw.android.bakingrecipes.services.RecipeWidgetService;
 import sk.dejw.android.bakingrecipes.ui.RecipeDetailActivity;
 import sk.dejw.android.bakingrecipes.ui.RecipesActivity;
@@ -27,64 +23,30 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Recipe recipe) {
-
-        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
-        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews rv;
-        if (width < 300) {
-            rv = getRecipeImageRemoteView(context, recipe, appWidgetId);
-        } else {
-            rv = getRecipeStepsRemoteView(context, recipe, appWidgetId);
-        }
+        rv = getRecipeIngredientsRemoteView(context, recipe, appWidgetId);
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
-    private static RemoteViews getRecipeImageRemoteView(Context context, Recipe recipe, int appWidgetId) {
-        Intent intent;
-        if (recipe == null || recipe.getId() == RecipeContract.INVALID_RECIPE_ID) {
-            intent = new Intent(context, RecipesActivity.class);
-        } else { // Set on click to open the corresponding detail activity
-            Log.d(TAG, "getRecipeImageRemoteView recipeId=" + recipe.getId());
-            intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
-            intent.setData(Uri.withAppendedPath(Uri.parse("myapp://widget/id/#togetituniqie" + appWidgetId), String.valueOf(appWidgetId)));
-        }
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_recipe_image);
-
-        if (recipe != null && recipe.equals("")) {
-            int[] appWidgetIds = {appWidgetId};
-            Picasso.with(context)
-                    .load(recipe.getImage())
-                    .error(R.drawable.ic_broken_image_black_24dp)
-                    .into(views, R.id.iv_widget_recipe_image, appWidgetIds);
-        }
-
-        views.setTextViewText(R.id.tv_widget_recipe_name, String.valueOf(recipe.getName()));
-
-        Log.d(TAG, "Pending intent" + pendingIntent.toString());
-
-        views.setOnClickPendingIntent(R.id.iv_widget_recipe_image, pendingIntent);
-        views.setOnClickPendingIntent(R.id.tv_widget_recipe_name, pendingIntent);
-
-        return views;
-    }
-
-    private static RemoteViews getRecipeStepsRemoteView(Context context, Recipe recipe, int appWidgetId) {
-        Log.d(TAG, "getRecipeStepsRemoteView recipeId = " + recipe.getId());
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_recipe_steps_view);
+    private static RemoteViews getRecipeIngredientsRemoteView(Context context, Recipe recipe, int appWidgetId) {
+        Log.d(TAG, "getRecipeIngredientsRemoteView recipeId = " + recipe.getId());
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_recipe_ingredients);
 
         Intent intent = new Intent(context, RecipeWidgetService.class);
-//        intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
-        views.setRemoteAdapter(R.id.gv_widget_recipe_steps_view, intent);
+        views.setRemoteAdapter(R.id.gv_widget_recipe_ingredients_view, intent);
 
+        views.setTextViewText(R.id.tv_widget_recipe_name, recipe.getName());
+
+//        Bundle extras = new Bundle();
+//        extras.putParcelable(RecipeDetailActivity.EXTRA_RECIPE, recipe);
         Intent appIntent = new Intent(context, RecipeDetailActivity.class);
-        appIntent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
-        appIntent.setData(Uri.withAppendedPath(Uri.parse("myapp://widget/id/#togetituniqie" + appWidgetId), String.valueOf(appWidgetId)));
+//        appIntent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
+//        appIntent.setData(Uri.withAppendedPath(Uri.parse("myapp://widget/id/#togetituniqie" + appWidgetId), String.valueOf(appWidgetId)));
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.gv_widget_recipe_steps_view, appPendingIntent);
-        views.setEmptyView(R.id.gv_widget_recipe_steps_view, R.id.empty_view);
+//        Intent appIntent = new Intent(context, RecipesActivity.class);
+//        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.gv_widget_recipe_ingredients_view, appPendingIntent);
+        views.setEmptyView(R.id.gv_widget_recipe_ingredients_view, R.id.empty_view);
         return views;
     }
 

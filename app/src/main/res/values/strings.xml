@@ -23,5 +23,7 @@
     - Widget
     -->
     <string name="empty_view_text">Recipes are empty.</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

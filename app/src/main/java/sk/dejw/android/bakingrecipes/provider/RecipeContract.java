@@ -3,6 +3,7 @@ package sk.dejw.android.bakingrecipes.provider;
 import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
+import net.simonvt.schematic.annotation.DefaultValue;
 import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
 
@@ -41,6 +42,11 @@ public class RecipeContract {
     @DataType(DataType.Type.TEXT)
     @NotNull
     public static final String COLUMN_IMAGE = "image";
+
+    @DataType(DataType.Type.INTEGER)
+    @NotNull
+    @DefaultValue("0")
+    public static final String COLUMN_SHOW_ON_WIDGET = "show_on_widget";
 
     public static final long INVALID_RECIPE_ID = -1;
 }

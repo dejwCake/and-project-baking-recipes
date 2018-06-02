@@ -29,6 +29,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         if (startingIntent != null) {
             Log.d(TAG, "Intent: " + startingIntent.toString());
             if (startingIntent.hasExtra(EXTRA_RECIPE)) {
+                Log.d(TAG, "Extras: " + startingIntent.getExtras().toString());
                 mRecipe = startingIntent.getExtras().getParcelable(EXTRA_RECIPE);
             }
         }
@@ -36,6 +37,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         if (mRecipe == null && savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_RECIPE)) {
             mRecipe = savedInstanceState.getParcelable(BUNDLE_RECIPE);
         }
+        Log.d(TAG, "Recipe: " + mRecipe.getName());
 
         setTitle(mRecipe.getName());
 
@@ -62,6 +64,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             mTwoPane = false;
         }
 
+        Log.d(TAG, "Calling startActionUpdateRecipeWidgets");
         RecipeService.startActionUpdateRecipeWidgets(this, mRecipe.getId());
     }
 

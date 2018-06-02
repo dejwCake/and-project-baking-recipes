@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
+import sk.dejw.android.bakingrecipes.provider.RecipeContract;
+
 public class Recipe implements Parcelable {
     private Integer id;
     private String name;
@@ -125,7 +127,7 @@ public class Recipe implements Parcelable {
         RecipeStep[] steps = {
                 new RecipeStep(0, "Recipe Introduction", "Recipe Introduction", "", ""),
         };
-        Recipe recipe = new Recipe(0, "Test", ingredients, steps, 2, "");
+        Recipe recipe = new Recipe((int)RecipeContract.INVALID_RECIPE_ID, "Test", ingredients, steps, 2, "");
         return recipe;
     }
 }

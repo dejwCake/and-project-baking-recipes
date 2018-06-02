@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import sk.dejw.android.bakingrecipes.models.Ingredient;
 import sk.dejw.android.bakingrecipes.models.Recipe;
 import sk.dejw.android.bakingrecipes.provider.RecipeContract;
 import sk.dejw.android.bakingrecipes.provider.RecipeProvider;
@@ -19,31 +20,42 @@ public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
     public static final String TAG = GridRemoteViewsFactory.class.getSimpleName();
 
     Context mContext;
+    Cursor mCursor;
     Recipe mRecipe;
 
-    public GridRemoteViewsFactory(Context applicationContext, Recipe recipe) {
+    public GridRemoteViewsFactory(Context applicationContext) {
         mContext = applicationContext;
-        mRecipe = recipe;
     }
 
     @Override
     public void onCreate() {
-
+        Log.d(TAG, "onCreate");
     }
 
     @Override
     public void onDataSetChanged() {
-        Cursor cursor = mContext.getContentResolver().query(
-                RecipeProvider.Recipes.withId(mRecipe.getId()),
-                null,
-                null,
-                null,
-                RecipeContract.COLUMN_ID
-        );
-        if (cursor != null && cursor.getCount() > 0) {
-            mRecipe = RecipeCursorUtils.getFirstRecipeFromCursor(cursor);
-            cursor.close();
+        Log.d(TAG, "onDataSetChanged");
+        mRecipe = null;
+        if (mCursor != null) mCursor.close();
+        try {
+            mCursor = mContext.getContentResolver().query(
+                    RecipeProvider.Recipes.RECIPES_URI,
+                    null,
+                    RecipeContract.COLUMN_SHOW_ON_WIDGET + " = ?",
+                    new String[]{ "1" },
+                    RecipeContract.COLUMN_ID
+            );
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        Log.d(TAG, "Cursor count " + mCursor.getCount());
+        if (mCursor != null && mCursor.getCount() > 0) {
+            mRecipe = RecipeCursorUtils.getFirstRecipeFromCursor(mCursor);
+            mCursor.close();
+        } else {
+            mRecipe = Recipe.mockObject();
+        }
+        Log.d(TAG, "Recipe " + mRecipe.getName());
     }
 
     @Override
@@ -53,24 +65,29 @@ public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getCount() {
-        if (mRecipe.getSteps() == null) return 0;
-        Log.d(TAG, "Recipe steps count" + mRecipe.getSteps().length);
-        return mRecipe.getSteps().length;
+        if (mRecipe == null || mRecipe.getIngredients() == null) return 0;
+        Log.d(TAG, "Recipe ingredients count" + mRecipe.getIngredients().length);
+        return mRecipe.getIngredients().length;
     }
 
     @Override
     public RemoteViews getViewAt(int i) {
-        if (mRecipe == null || mRecipe.getSteps().length == 0) return null;
+        if (mRecipe == null || mRecipe.getIngredients().length == 0) return null;
 
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_recipe_step_list_item);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_recipe_ingredient_item);
 
-        views.setTextViewText(R.id.tv_recipe_step_description, mRecipe.getSteps()[i].getDescription());
+        Ingredient ingredient = mRecipe.getIngredients()[i];
+        views.setTextViewText(R.id.tv_ingredient_name, ingredient.getIngredient());
+        views.setTextViewText(R.id.tv_ingredient_quantity, String.format("%d %s", ingredient.getQuantity(), ingredient.getMeasure()));
+
+        Log.d(TAG, "i " + i);
+        Log.d(TAG, "Ingredient " + ingredient.getIngredient());
 
         Bundle extras = new Bundle();
         extras.putParcelable(RecipeDetailActivity.EXTRA_RECIPE, mRecipe);
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
-        views.setOnClickFillInIntent(R.id.tv_recipe_step_description, fillInIntent);
+        views.setOnClickFillInIntent(R.id.tv_ingredient_name, fillInIntent);
 
         return views;
     }
@@ -82,7 +99,7 @@ public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
