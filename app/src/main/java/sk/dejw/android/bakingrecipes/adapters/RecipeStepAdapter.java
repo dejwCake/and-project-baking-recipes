@@ -40,7 +40,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Re
     public void onBindViewHolder(RecipeStepViewHolder holder, int position) {
         RecipeStep recipeStep = mData.get(position);
 
-        holder.recipeStepDescriptionTextView.setText(recipeStep.getShortDescription());
+        holder.recipeStepPositionTextView.setText(String.valueOf(recipeStep.getId() + 1).concat("."));
+        holder.recipeStepShortDescriptionTextView.setText(recipeStep.getShortDescription());
         holder.itemPosition = position;
     }
 
@@ -51,7 +52,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Re
     }
 
     public class RecipeStepViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_recipe_step_description) TextView recipeStepDescriptionTextView;
+        @BindView(R.id.tv_recipe_step_position) TextView recipeStepPositionTextView;
+        @BindView(R.id.tv_recipe_step_short_description) TextView recipeStepShortDescriptionTextView;
         int itemPosition;
 
         public RecipeStepViewHolder(View layoutView) {
