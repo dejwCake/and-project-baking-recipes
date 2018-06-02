@@ -7,6 +7,11 @@
     <string name="error_message">An error has occurred.</string>
 
     <!--
+    - List of recipes
+    -->
+    <string name="servings_label">Servings</string>
+
+    <!--
     - Detail
     -->
     <string name="ingredients">Ingredients</string>

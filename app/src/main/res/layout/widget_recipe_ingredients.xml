@@ -14,10 +14,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="@string/empty_view_text"
             android:textColor="#ffffff"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
 
         <GridView
             android:id="@+id/gv_widget_recipe_ingredients_view"

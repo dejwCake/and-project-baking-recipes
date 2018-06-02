@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Visibility;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import sk.dejw.android.bakingrecipes.models.Recipe;
@@ -36,15 +38,10 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.gv_widget_recipe_ingredients_view, intent);
 
         views.setTextViewText(R.id.tv_widget_recipe_name, recipe.getName());
+        views.setViewVisibility(R.id.tv_widget_recipe_name, View.VISIBLE);
 
-//        Bundle extras = new Bundle();
-//        extras.putParcelable(RecipeDetailActivity.EXTRA_RECIPE, recipe);
         Intent appIntent = new Intent(context, RecipeDetailActivity.class);
-//        appIntent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
-//        appIntent.setData(Uri.withAppendedPath(Uri.parse("myapp://widget/id/#togetituniqie" + appWidgetId), String.valueOf(appWidgetId)));
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        Intent appIntent = new Intent(context, RecipesActivity.class);
-//        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.gv_widget_recipe_ingredients_view, appPendingIntent);
         views.setEmptyView(R.id.gv_widget_recipe_ingredients_view, R.id.empty_view);
         return views;

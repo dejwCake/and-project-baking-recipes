@@ -29,6 +29,7 @@ import sk.dejw.android.bakingrecipes.asyncTasks.FetchRecipesTask;
 import sk.dejw.android.bakingrecipes.asyncTasks.SaveRecipesTask;
 import sk.dejw.android.bakingrecipes.idlingResource.SimpleIdlingResource;
 import sk.dejw.android.bakingrecipes.models.Recipe;
+import sk.dejw.android.bakingrecipes.provider.RecipeContract;
 import sk.dejw.android.bakingrecipes.provider.RecipeProvider;
 import sk.dejw.android.bakingrecipes.utils.GlobalNetworkUtils;
 import sk.dejw.android.bakingrecipes.utils.RecipeCursorUtils;
@@ -72,7 +73,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         } else {
             mRecipeListView.setLayoutManager(new GridLayoutManager(this, 3));
         }
-        mAdapter = new RecipeAdapter(mListOfRecipes, this);
+        mAdapter = new RecipeAdapter(this, mListOfRecipes, this);
         mRecipeListView.setAdapter(mAdapter);
 
         getIdlingResource();
@@ -83,8 +84,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         super.onResume();
 
         //Get data from remote with async task
-//        loadDataFromInternet();
-        getSupportLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
+        loadDataFromInternet();
     }
 
     @Override
@@ -94,43 +94,60 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
     }
 
     private void loadDataFromInternet() {
+        Log.d(TAG, "loadDataFromInternet");
         showDataView();
+
+        setIdleStatue(false);
 
         if (GlobalNetworkUtils.hasConnection(this)) {
             Log.d(TAG, "Internet working.");
+
             mLoadingIndicator.setVisibility(View.VISIBLE);
-
-            setIdle(false);
-
             new FetchRecipesTask(this, new FetchRecipesTaskCompleteListener()).execute();
         } else {
-            showErrorMessage();
+            Log.d(TAG, "Internet not working.");
+
+            loadDataFromDb();
         }
 
     }
 
     private void saveDataFromInternet(Recipe[] recipes) {
+        Log.d(TAG, "saveDataFromInternet");
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         new SaveRecipesTask(this, new SaveRecipesTaskCompleteListener()).execute(recipes);
     }
 
-    private void loadData() {
+    private void loadDataFromDb() {
+        Log.d(TAG, "loadDataFromDb");
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         getSupportLoaderManager().initLoader(RECIPE_LOADER_ID, null, this);
     }
 
     private void showDataView() {
+        Log.d(TAG, "showDataView");
+
         mErrorMessage.setVisibility(View.INVISIBLE);
         mRecipeListView.setVisibility(View.VISIBLE);
     }
 
     private void showErrorMessage() {
-        setIdle(true);
+        Log.d(TAG, "showErrorMessage");
+
+        setIdleStatue(true);
         mRecipeListView.setVisibility(View.INVISIBLE);
         mErrorMessage.setVisibility(View.VISIBLE);
     }
 
-    private void swapData(Cursor data) {
-        setIdle(true);
-        ArrayList<Recipe> listOfRecipes = RecipeCursorUtils.getRecipesFromCursor(data);
+    private void swapData(Cursor cursor) {
+        Log.d(TAG, "swapData");
+        Log.d(TAG, "Swapping for recipes: " + cursor.getCount());
+
+        setIdleStatue(true);
+        ArrayList<Recipe> listOfRecipes = RecipeCursorUtils.getRecipesFromCursor(cursor);
+        Log.d(TAG, "Swapping for recipes: " + listOfRecipes.size());
         mAdapter.swapData(listOfRecipes);
         mAdapter.notifyDataSetChanged();
     }
@@ -144,21 +161,24 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader");
+
         return new CursorLoader(this,
                 RecipeProvider.Recipes.RECIPES_URI,
                 null,
                 null,
                 null,
-                null);
+                RecipeContract.COLUMN_ID);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "Recipes loaded: ".concat(String.valueOf(data.getCount())));
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d(TAG, "Recipes loaded: " + String.valueOf(cursor.getCount()));
+
         mLoadingIndicator.setVisibility(View.INVISIBLE);
-        if (data.getCount() != 0) {
+        if (cursor.getCount() != 0) {
             showDataView();
-            swapData(data);
+            swapData(cursor);
         } else {
             showErrorMessage();
         }
@@ -178,7 +198,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         return mIdlingResource;
     }
 
-    private void setIdle(boolean bool) {
+    private void setIdleStatue(boolean bool) {
         if(bool) {
             Log.d(TAG, "Setting idle to true");
         } else {
@@ -195,6 +215,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         public void onTaskComplete(Recipe[] recipes)
         {
             Log.d(TAG, "Recipes downloaded: ".concat(String.valueOf(recipes.length)));
+
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (recipes != null) {
                 saveDataFromInternet(recipes);
@@ -209,9 +230,11 @@ public class RecipesActivity extends AppCompatActivity implements RecipeAdapter.
         @Override
         public void onTaskComplete(String result)
         {
+            Log.d(TAG, "Recipes saved to db: " + result);
+
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (result.equals(SaveRecipesTask.OK_RESULT)) {
-                loadData();
+                loadDataFromDb();
             } else {
                 showErrorMessage();
             }

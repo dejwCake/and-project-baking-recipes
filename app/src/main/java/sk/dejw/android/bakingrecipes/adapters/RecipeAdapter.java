@@ -1,11 +1,15 @@
 package sk.dejw.android.bakingrecipes.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -16,10 +20,12 @@ import sk.dejw.android.bakingrecipes.models.Recipe;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
+    private Context mContext;
     private ArrayList<Recipe> mData;
     private RecipeAdapterOnClickHandler mClickHandler;
 
-    public RecipeAdapter(ArrayList<Recipe> data, RecipeAdapterOnClickHandler clickHandler){
+    public RecipeAdapter(Context context, ArrayList<Recipe> data, RecipeAdapterOnClickHandler clickHandler) {
+        this.mContext = context;
         this.mData = data;
         this.mClickHandler = clickHandler;
     }
@@ -42,6 +48,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Recipe recipe = mData.get(position);
 
         holder.recipeNameTextView.setText(recipe.getName());
+        if(!recipe.getImage().isEmpty()) {
+            Picasso.with(mContext)
+                    .load(recipe.getImage())
+                    .error(R.drawable.ic_broken_image_black_24dp)
+                    .into(holder.recipeImageView);
+        } else {
+            holder.recipeImageView.setVisibility(View.GONE);
+        }
+        holder.recipeServingsTextView.setText(String.valueOf(recipe.getServings()));
         holder.itemPosition = position;
     }
 
@@ -57,7 +72,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_recipe_name) TextView recipeNameTextView;
+        @BindView(R.id.tv_recipe_name)
+        TextView recipeNameTextView;
+        @BindView(R.id.tv_recipe_servings)
+        TextView recipeServingsTextView;
+        @BindView(R.id.iv_recipe_image)
+        ImageView recipeImageView;
         int itemPosition;
 
         public RecipeViewHolder(View layoutView) {
