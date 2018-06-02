@@ -116,4 +116,16 @@ public class Recipe implements Parcelable {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public static Recipe mockObject() {
+        Ingredient[] ingredients = {
+            new Ingredient(500, "G", "Mascapone Cheese(room temperature)"),
+            new Ingredient(2, "CUP", "heavy cream(cold)"),
+        };
+        RecipeStep[] steps = {
+                new RecipeStep(0, "Recipe Introduction", "Recipe Introduction", "", ""),
+        };
+        Recipe recipe = new Recipe(0, "Test", ingredients, steps, 2, "");
+        return recipe;
+    }
 }

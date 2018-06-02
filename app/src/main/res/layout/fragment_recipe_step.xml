@@ -19,10 +19,18 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
+        android:id="@+id/tv_step_description_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_view_margin"
+        android:text="@string/description_label"
+        app:layout_constraintTop_toBottomOf="@+id/player_view" />
+
+    <TextView
         android:id="@+id/tv_step_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_view_margin"
-        app:layout_constraintTop_toBottomOf="@+id/player_view" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_step_description_label" />
 
 </android.support.constraint.ConstraintLayout>

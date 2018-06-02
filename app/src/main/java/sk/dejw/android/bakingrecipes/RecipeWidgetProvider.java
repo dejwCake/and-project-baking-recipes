@@ -96,15 +96,14 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        //Start the intent service update widget action, the service takes care of updating the widgets UI
-        RecipeService.startActionUpdateRecipeWidgets(context, RecipeContract.INVALID_RECIPE_ID);
+//        RecipeService.startActionUpdateRecipeWidgets(context, RecipeContract.INVALID_RECIPE_ID);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
                                           int appWidgetId, Bundle newOptions) {
-        RecipeService.startActionUpdateRecipeWidgets(context, RecipeContract.INVALID_RECIPE_ID);
+//        RecipeService.startActionUpdateRecipeWidgets(context, RecipeContract.INVALID_RECIPE_ID);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
