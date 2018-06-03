@@ -167,10 +167,12 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     private void releasePlayer() {
-        updateStartPosition();
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null) {
+            updateStartPosition();
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     private void updateStartPosition() {
@@ -198,6 +200,22 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         currentState.putLong(PLAYER_POSITION, mStartPosition);
 
         super.onSaveInstanceState(currentState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     @Override
