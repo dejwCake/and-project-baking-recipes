@@ -203,6 +203,22 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23 && !TextUtils.isEmpty(mRecipeStep.getVideoURL())) {
+            initializePlayer(Uri.parse(mRecipeStep.getVideoURL()));
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || mExoPlayer == null && !TextUtils.isEmpty(mRecipeStep.getVideoURL())) {
+            initializePlayer(Uri.parse(mRecipeStep.getVideoURL()));
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         if (Util.SDK_INT <= 23) {
