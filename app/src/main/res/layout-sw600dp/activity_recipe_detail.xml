@@ -17,19 +17,9 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray" />
 
-    <ScrollView
-        android:id="@+id/sv_recipe_step"
+    <FrameLayout android:id="@+id/recipe_step_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_margin"
-        android:paddingLeft="@dimen/activity_margin"
-        android:paddingRight="@dimen/activity_margin"
-        android:paddingTop="@dimen/activity_margin">
-
-        <FrameLayout android:id="@+id/recipe_step_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside" />
-    </ScrollView>
+        android:scaleType="centerInside" />
 
 </LinearLayout>

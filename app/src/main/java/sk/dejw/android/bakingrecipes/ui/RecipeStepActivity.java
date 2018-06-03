@@ -3,6 +3,7 @@ package sk.dejw.android.bakingrecipes.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,6 +18,7 @@ import sk.dejw.android.bakingrecipes.models.RecipeStep;
 
 public class RecipeStepActivity extends AppCompatActivity {
 
+    private static final String TAG = RecipeStepActivity.class.getSimpleName();
     public static final String RECIPE_NAME = "recipe_name";
     public static final String RECIPE = "recipe";
     public static final String RECIPE_STEP_POSITION = "recipe_step_position";
@@ -72,11 +74,17 @@ public class RecipeStepActivity extends AppCompatActivity {
 
     private void initializeButtons() {
         final int previous = mRecipeStepPosition - 1;
+        mPreviousStep.setVisibility(View.VISIBLE);
+        mNextStep.setVisibility(View.VISIBLE);
+
         if(previous < 0) {
             mPreviousStep.setVisibility(View.GONE);
+        } else {
             mPreviousStep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "Previous clicked");
+                    mRecipeStepPosition = previous;
                     RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
 
                     recipeStepFragment.setRecipe(mRecipe);
@@ -84,15 +92,19 @@ public class RecipeStepActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.recipe_step_container, recipeStepFragment)
                             .commit();
+                    initializeButtons();
                 }
             });
         }
         final int next = mRecipeStepPosition + 1;
         if(next >= mRecipeSteps.size()) {
             mNextStep.setVisibility(View.GONE);
+        } else {
             mNextStep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d(TAG, "Previous clicked");
+                    mRecipeStepPosition = next;
                     RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
 
                     recipeStepFragment.setRecipe(mRecipe);
@@ -100,6 +112,7 @@ public class RecipeStepActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.recipe_step_container, recipeStepFragment)
                             .commit();
+                    initializeButtons();
                 }
             });
         }

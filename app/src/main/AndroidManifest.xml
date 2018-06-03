@@ -44,7 +44,7 @@
             android:parentActivityName=".ui.RecipesActivity" />
         <activity
             android:name=".ui.RecipeStepActivity"
-            android:parentActivityName=".ui.RecipesActivity" />
+            android:parentActivityName=".ui.RecipeDetailActivity" />
     </application>
 
 </manifest>

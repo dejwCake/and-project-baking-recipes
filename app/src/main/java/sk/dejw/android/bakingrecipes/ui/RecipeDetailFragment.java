@@ -71,7 +71,7 @@ public class RecipeDetailFragment extends Fragment  implements RecipeStepAdapter
         mIngredientListView.setAdapter(mIngredientAdapter);
 
         mStepListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecipeStepAdapter = new RecipeStepAdapter(new ArrayList<RecipeStep>(Arrays.asList(mRecipe.getSteps())), this);
+        mRecipeStepAdapter = new RecipeStepAdapter(getActivity(), new ArrayList<RecipeStep>(Arrays.asList(mRecipe.getSteps())), this);
         mStepListView.setAdapter(mRecipeStepAdapter);
 
         return rootView;

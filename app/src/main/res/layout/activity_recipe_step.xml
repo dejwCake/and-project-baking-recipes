@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/sv_recipe_step"
+<RelativeLayout android:id="@+id/ll_recipe_step"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RecipeStepActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    tools:context=".ui.RecipeStepActivity">
 
-        <android.support.constraint.ConstraintLayout
+        <FrameLayout android:id="@+id/recipe_step_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:gravity="center" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-                <FrameLayout android:id="@+id/recipe_step_container"
-                    android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal" >
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerInside"/>
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom|start"
+                    android:layout_weight="1">
+                        <Button
+                            android:id="@+id/bt_prev_step"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/previous" />
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/bt_prev_step"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/text_view_margin"
-                    android:layout_marginLeft="@dimen/text_view_margin"
-                    android:layout_marginTop="@dimen/text_view_margin"
-                    android:text="@string/previous"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/recipe_step_container" />
-
-                <Button
-                    android:id="@+id/bt_next_step"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/text_view_margin"
-                    android:layout_marginRight="@dimen/text_view_margin"
-                    android:layout_marginTop="@dimen/text_view_margin"
-                    android:text="@string/next"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/recipe_step_container" />
-        </android.support.constraint.ConstraintLayout>
-
-
-</ScrollView>
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom|end"
+                    android:layout_weight="1">
+                        <Button
+                            android:id="@+id/bt_next_step"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/next" />
+                </LinearLayout>
+        </LinearLayout>
+</RelativeLayout>
