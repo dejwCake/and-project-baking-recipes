@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,10 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     public static final String RECIPE = "recipe";
     public static final String RECIPE_STEP_POSITION = "recipe_step_position";
 
+    private static final String PLAYER_AUTO_PLAY = "auto_play";
+    private static final String PLAYER_WINDOW = "window";
+    private static final String PLAYER_POSITION = "position";
+
     private static final String TAG = RecipeStepFragment.class.getSimpleName();
 
     private Recipe mRecipe;
@@ -65,6 +70,9 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     private PlaybackStateCompat.Builder mStateBuilder;
     private boolean mHasPlayer = false;
 
+    private boolean mStartAutoPlay;
+    private long mStartPosition;
+
     public RecipeStepFragment() {
     }
 
@@ -74,6 +82,11 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(RECIPE);
             mRecipeStepPosition = savedInstanceState.getInt(RECIPE_STEP_POSITION);
+
+            mStartAutoPlay = savedInstanceState.getBoolean(PLAYER_AUTO_PLAY);
+            mStartPosition = savedInstanceState.getLong(PLAYER_POSITION);
+        } else {
+            clearStartPosition();
         }
 
         View rootView = inflater.inflate(R.layout.fragment_recipe_step, container, false);
@@ -82,7 +95,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mRecipeSteps = new ArrayList<RecipeStep>(Arrays.asList(mRecipe.getSteps()));
         mRecipeStep = mRecipeSteps.get(mRecipeStepPosition);
         mDescription.setText(mRecipeStep.getDescription());
-        if(mRecipeStep.getThumbnailURL() != null && !mRecipeStep.getThumbnailURL().isEmpty()) {
+        if(!TextUtils.isEmpty(mRecipeStep.getThumbnailURL())) {
             Picasso.with(getContext())
                     .load(mRecipeStep.getThumbnailURL())
                     .error(R.drawable.ic_broken_image_black_24dp)
@@ -94,7 +107,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), R.drawable.ic_launcher_foreground));
 
-        if (mRecipeStep.getVideoURL() != null && !mRecipeStep.getVideoURL().isEmpty()) {
+        if (!TextUtils.isEmpty(mRecipeStep.getVideoURL())) {
             initializeMediaSession();
 
             initializePlayer(Uri.parse(mRecipeStep.getVideoURL()));
@@ -147,15 +160,29 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             String userAgent = Util.getUserAgent(getContext(), "BakingRecipes");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+            mExoPlayer.seekTo(mStartPosition);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(mStartAutoPlay);
         }
     }
 
     private void releasePlayer() {
+        updateStartPosition();
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
+    }
+
+    private void updateStartPosition() {
+        if (mExoPlayer != null) {
+            mStartAutoPlay = mExoPlayer.getPlayWhenReady();
+            mStartPosition = Math.max(0, mExoPlayer.getCurrentPosition());
+        }
+    }
+
+    private void clearStartPosition() {
+        mStartAutoPlay = true;
+        mStartPosition = C.TIME_UNSET;
     }
 
     /**
@@ -163,8 +190,13 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
      */
     @Override
     public void onSaveInstanceState(Bundle currentState) {
+        updateStartPosition();
         currentState.putParcelable(RECIPE, mRecipe);
         currentState.putInt(RECIPE_STEP_POSITION, mRecipeStepPosition);
+
+        currentState.putBoolean(PLAYER_AUTO_PLAY, mStartAutoPlay);
+        currentState.putLong(PLAYER_POSITION, mStartPosition);
+
         super.onSaveInstanceState(currentState);
     }
 
@@ -209,6 +241,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
     @Override
     public void onPositionDiscontinuity() {
+
     }
 
     private class MySessionCallback extends MediaSessionCompat.Callback {
