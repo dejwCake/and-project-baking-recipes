@@ -9,6 +9,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
@@ -29,6 +30,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +55,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.iv_thumbnail)
+    ImageView mThumbnail;
     @BindView(R.id.tv_step_description)
     TextView mDescription;
 
@@ -78,6 +82,14 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mRecipeSteps = new ArrayList<RecipeStep>(Arrays.asList(mRecipe.getSteps()));
         mRecipeStep = mRecipeSteps.get(mRecipeStepPosition);
         mDescription.setText(mRecipeStep.getDescription());
+        if(mRecipeStep.getThumbnailURL() != null && !mRecipeStep.getThumbnailURL().isEmpty()) {
+            Picasso.with(getContext())
+                    .load(mRecipeStep.getThumbnailURL())
+                    .error(R.drawable.ic_broken_image_black_24dp)
+                    .into(mThumbnail);
+        } else {
+            mThumbnail.setVisibility(View.GONE);
+        }
 
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), R.drawable.ic_launcher_foreground));

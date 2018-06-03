@@ -16,6 +16,8 @@
     <dimen name="title_font_size">16sp</dimen>
     <dimen name="small_font_size">12sp</dimen>
 
+    <dimen name="image_width">48dp</dimen>
+    <dimen name="image_height">48dp</dimen>
     <dimen name="button_width">150dp</dimen>
 
     <dimen name="widget_margin">8dp</dimen>
