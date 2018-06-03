@@ -67,8 +67,6 @@ public class RecipeStepActivity extends AppCompatActivity {
             setTitle(mRecipeName);
         }
 
-        //TODO back button not working
-
         initializeButtons();
     }
 

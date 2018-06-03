@@ -79,7 +79,6 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mRecipeStep = mRecipeSteps.get(mRecipeStepPosition);
         mDescription.setText(mRecipeStep.getDescription());
 
-        //TODO setup layout
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                 (getResources(), R.drawable.ic_launcher_foreground));
 

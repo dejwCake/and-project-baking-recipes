@@ -35,6 +35,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         }
 
         if (mRecipe == null && savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_RECIPE)) {
+            Log.d(TAG, "savedInstanceState: " + savedInstanceState.toString());
             mRecipe = savedInstanceState.getParcelable(BUNDLE_RECIPE);
         }
         Log.d(TAG, "Recipe: " + mRecipe.getName());

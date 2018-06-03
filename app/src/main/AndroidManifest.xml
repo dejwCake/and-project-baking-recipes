@@ -41,7 +41,8 @@
         </activity>
         <activity
             android:name=".ui.RecipeDetailActivity"
-            android:parentActivityName=".ui.RecipesActivity" />
+            android:parentActivityName=".ui.RecipesActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.RecipeStepActivity"
             android:parentActivityName=".ui.RecipeDetailActivity" />
